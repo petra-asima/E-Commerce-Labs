@@ -1,0 +1,5 @@
+# Local database credentials - never commit
+core/db_cred.php
+
+# Error logs (created from Task 2 onwards)
+error/*.log
