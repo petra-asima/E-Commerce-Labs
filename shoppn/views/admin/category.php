@@ -1,9 +1,9 @@
 <?php
-// Admin: manage categories (Task 7). Add a category and list all categories.
+// Admin: manage categories — add (Task 7) and edit (Task 8) in one page.
 require_once __DIR__ . '/../../core/core.php';
 require_once __DIR__ . '/../../controllers/ProductController.php';
 
-// require_admin() at the top — before any HTML
+// Brief: require_admin() at the top — before any HTML
 require_admin();
 
 // Show success / error messages, then clear them
@@ -11,8 +11,20 @@ $success = $_SESSION['success'] ?? null;
 $error   = $_SESSION['error'] ?? null;
 unset($_SESSION['success'], $_SESSION['error']);
 
+$ctrl = new ProductController();
+
+// Task 8: if ?edit_id=N is present, load that category into the form
+$editCategory = null;
+if (isset($_GET['edit_id'])) {
+    $editId       = filter_var($_GET['edit_id'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+    $editCategory = $editId ? $ctrl->getCategoryById($editId) : false;
+    if (!$editCategory) {
+        $error        = $error ?? 'Category not found.';
+        $editCategory = null;
+    }
+}
+
 // Fetch all categories via ProductController → getAllCategories()
-$ctrl       = new ProductController();
 $categories = $ctrl->getAllCategories();
 
 $page_title = 'Categories | Admin';
@@ -32,22 +44,43 @@ require __DIR__ . '/../layout/header.php';
         <p class="alert alert-error" role="alert"><?= e($error) ?></p>
     <?php endif; ?>
 
-    <!-- Form for adding a category name -->
-    <section class="panel">
-        <h2>Add a category</h2>
-        <form id="category-form" class="inline-form" method="POST"
-              action="<?= url('actions/add_category_action.php') ?>" novalidate>
-            <div class="field">
-                <label for="cat_name">Category name</label>
-                <input id="cat_name" name="cat_name" type="text" maxlength="100"
-                       placeholder="e.g. Wax prints">
-                <span class="field-error" id="category-error" aria-live="polite"></span>
-            </div>
-            <div class="inline-actions">
-                <button type="submit" class="btn">Add category</button>
-            </div>
-        </form>
-    </section>
+    <?php if ($editCategory): ?>
+        <!-- Task 8: edit mode — form targets update_category_action.php -->
+        <section class="panel">
+            <h2>Edit category</h2>
+            <form id="category-form" class="inline-form" method="POST"
+                  action="<?= url('actions/update_category_action.php') ?>" novalidate>
+                <input type="hidden" name="cat_id" value="<?= (int) $editCategory['cat_id'] ?>">
+                <div class="field">
+                    <label for="cat_name">Category name</label>
+                    <input id="cat_name" name="cat_name" type="text" maxlength="100"
+                           value="<?= e($editCategory['cat_name']) ?>">
+                    <span class="field-error" id="category-error" aria-live="polite"></span>
+                </div>
+                <div class="inline-actions">
+                    <button type="submit" class="btn">Save changes</button>
+                    <a class="btn btn-ghost" href="<?= url('views/admin/category.php') ?>">Cancel</a>
+                </div>
+            </form>
+        </section>
+    <?php else: ?>
+        <!-- Task 7: add mode — form for adding a category name -->
+        <section class="panel">
+            <h2>Add a category</h2>
+            <form id="category-form" class="inline-form" method="POST"
+                  action="<?= url('actions/add_category_action.php') ?>" novalidate>
+                <div class="field">
+                    <label for="cat_name">Category name</label>
+                    <input id="cat_name" name="cat_name" type="text" maxlength="100"
+                           placeholder="e.g. Wax prints">
+                    <span class="field-error" id="category-error" aria-live="polite"></span>
+                </div>
+                <div class="inline-actions">
+                    <button type="submit" class="btn">Add category</button>
+                </div>
+            </form>
+        </section>
+    <?php endif; ?>
 
     <!-- Table of all categories with Edit buttons -->
     <section class="panel panel--flush">
@@ -62,7 +95,7 @@ require __DIR__ . '/../layout/header.php';
                     </thead>
                     <tbody>
                         <?php foreach ($categories as $c): ?>
-                            <tr>
+                            <tr<?= ($editCategory && (int) $editCategory['cat_id'] === (int) $c['cat_id']) ? ' class="is-editing"' : '' ?>>
                                 <td class="cell-id"><?= (int) $c['cat_id'] ?></td>
                                 <td><?= e($c['cat_name']) ?></td>
                                 <td class="cell-action">

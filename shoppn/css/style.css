@@ -1,22 +1,26 @@
-
+/* ============================================================
+   shoppn — African prints store
+   Plain colours only: burgundy (brand), gold (accent),
+   deep wine and soft blush. No patterns or images.
+   ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap');
 
 /* ── Theme tokens ── */
 :root {
-    --brand: #7a1f3d;         
-    --brand-deep: #561229;    
-    --brand-tint: #f6eaee;    
-    --gold: #d6a648;          
+    --brand: #7a1f3d;         /* burgundy: buttons, links, hero */
+    --brand-deep: #561229;    /* burgundy hover / darker text */
+    --brand-tint: #f6eaee;    /* soft burgundy fill: selected rows */
+    --gold: #d6a648;          /* gold accent: highlights, focus, avatar */
     --gold-soft: #f3e3bf;
-    --wine: #3a0f1f;          
-    --blush: #f6e7ec;         
-    --danger: #b3261e;       
-    --ink: #2a1c21;           
-    --ink-soft: #6b5d62;      
-    --page: #f6f5f3;        
-    --surface: #ffffff;       
-    --line: #e7e1e2;          
+    --wine: #3a0f1f;          /* deep wine: footer, darkest surfaces */
+    --blush: #f6e7ec;         /* soft rose: page tints, auth background */
+    --danger: #b3261e;        /* errors */
+    --ink: #2a1c21;           /* main text */
+    --ink-soft: #6b5d62;      /* secondary text */
+    --page: #f6f5f3;          /* page background */
+    --surface: #ffffff;       /* panels */
+    --line: #e7e1e2;          /* borders */
 
     --r-panel: 14px;
     --r-input: 10px;
@@ -80,12 +84,13 @@ a:hover { color: var(--brand-deep); }
     border-bottom: 1px solid var(--line);
 }
 
-.header-row {
-    display: flex;
-    flex-wrap: wrap;
+/* Row 1: logo · search · account */
+.header-top {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 1rem 2rem;
-    padding-block: 1.1rem;
+    padding-block: 1rem;
 }
 
 .logo {
@@ -102,18 +107,19 @@ a:hover { color: var(--brand-deep); }
 
 .search {
     display: flex;
-    flex: 1 1 300px;
-    max-width: 460px;
+    width: 100%;
+    max-width: 620px;
+    justify-self: center;
     padding: 4px;
     background: var(--page);
     border: 1px solid var(--line);
     border-radius: var(--r-pill);
 }
-.search:focus-within { border-color: var(--brand); }
+.search:focus-within { border-color: var(--brand); background: var(--surface); }
 .search input {
     flex: 1;
     min-width: 0;
-    padding: .45rem 1rem;
+    padding: .5rem 1.1rem;
     border: 0;
     background: transparent;
     font: inherit;
@@ -121,7 +127,7 @@ a:hover { color: var(--brand-deep); }
 }
 .search input:focus { outline: none; }
 .search button {
-    padding: .45rem 1.2rem;
+    padding: .5rem 1.4rem;
     border: 0;
     border-radius: var(--r-pill);
     background: var(--brand);
@@ -132,54 +138,45 @@ a:hover { color: var(--brand-deep); }
 }
 .search button:hover { background: var(--brand-deep); }
 
-.header-nav {
+.account-nav > ul {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: .75rem 1.5rem;
-    margin-left: auto;
-}
-.nav-account {
-    padding-left: 1.5rem;
-    border-left: 1px solid var(--line);
-}
-
-.nav-links {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: .25rem 1.4rem;
+    gap: 1.25rem;
     margin: 0;
     padding: 0;
     list-style: none;
     font-weight: 500;
+    white-space: nowrap;
 }
-.nav-links a {
+.account-nav a {
     color: var(--ink);
     text-decoration: none;
-    padding-block: .3rem;
-    border-bottom: 2px solid transparent;
 }
-.nav-links a:hover { border-bottom-color: var(--gold); color: var(--ink); }
-.nav-links .nav-cta {
-    padding: .45rem 1.1rem;
-    border: 0;
+.account-nav a:hover,
+.account-nav a[aria-current="page"] { color: var(--brand); }
+.account-nav .nav-cta {
+    padding: .5rem 1.2rem;
     border-radius: var(--r-pill);
     background: var(--brand);
     color: #fff;
 }
-.nav-links .nav-cta:hover { background: var(--brand-deep); color: #fff; }
+.account-nav .nav-cta:hover { background: var(--brand-deep); color: #fff; }
 .nav-welcome {
     display: flex;
     align-items: center;
     gap: .5rem;
     color: var(--ink-soft);
 }
+.nav-welcome-text {
+    max-width: 12rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .nav-avatar {
     display: grid;
     place-items: center;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: var(--brand);
     color: #fff;
@@ -188,13 +185,55 @@ a:hover { color: var(--brand-deep); }
     font-weight: 800;
 }
 
-/* Login / register */
+/* Home link, next to the logo */
+.main-nav a {
+    color: var(--ink);
+    font-weight: 500;
+    text-decoration: none;
+    padding-block: .3rem;
+    box-shadow: inset 0 -2px 0 transparent;
+}
+.main-nav a:hover { color: var(--brand); }
+.main-nav a[aria-current="page"] { color: var(--brand); font-weight: 700; box-shadow: inset 0 -2px 0 var(--brand); }
+
+/* Desktop: keep the whole header in view while scrolling */
+@media (min-width: 901px) {
+    .site-header:not(.site-header--minimal) {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        box-shadow: 0 2px 12px rgba(58, 15, 31, .08);
+    }
+}
+
+/* Tablets and phones: search drops to its own full-width row */
+@media (max-width: 900px) {
+    .header-top {
+        grid-template-columns: auto auto 1fr;
+        grid-template-areas:
+            "logo home account"
+            "search search search";
+        gap: .75rem 1rem;
+    }
+    .header-top .logo   { grid-area: logo; }
+    .main-nav           { grid-area: home; }
+    .header-top .search { grid-area: search; max-width: none; }
+    .account-nav        { grid-area: account; justify-self: end; }
+    .nav-welcome-text   { display: none; }
+}
+
+@media (max-width: 560px) {
+    .account-nav > ul { flex-wrap: wrap; justify-content: flex-end; gap: .5rem .9rem; font-size: .95rem; }
+    .main-nav { display: none; } /* phones: the logo is the Home link */
+}
+
+/* Login / register: logo only, kept in view while scrolling */
 .site-header--minimal {
     position: sticky;
     top: 0;
     z-index: 50;
 }
-.site-header--minimal .header-row { justify-content: center; }
+.site-header--minimal .header-top { grid-template-columns: 1fr; justify-items: center; }
 
 /* ── Buttons ── */
 .btn {
@@ -258,23 +297,85 @@ a:hover { color: var(--brand-deep); }
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--r-panel);
-    padding: 1.5rem;
+    padding: 1.25rem;
 }
-.sidebar section + section {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--line);
+.sidebar-title {
+    margin: 0 0 .75rem;
+    padding-left: .75rem;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--ink);
 }
-.sidebar h2 { margin: 0 0 .6rem; font-size: 1.05rem; }
-.sidebar p { margin: 0; font-size: .95rem; }
-.sidebar ul { list-style: none; margin: 0; padding: 0; }
-.sidebar li a {
+.sidebar p { margin: 0; padding: .25rem .75rem; font-size: .95rem; }
+.sidebar ul { list-style: none; margin: 0 0 .5rem; padding: 0; }
+.sidebar li a,
+.sidebar-all {
     display: block;
-    padding: .35rem 0;
+    padding: .45rem .75rem;
+    border-radius: var(--r-input);
     color: var(--ink);
     text-decoration: none;
 }
-.sidebar li a:hover { color: var(--brand); }
+.sidebar li a { padding-left: 1.25rem; }
+.sidebar-all { font-weight: 600; }
+.sidebar li a:hover,
+.sidebar-all:hover { background: var(--page); color: var(--brand); }
+.sidebar li a[aria-current="page"],
+.sidebar-all[aria-current="page"] {
+    background: var(--brand-tint);
+    color: var(--brand);
+    font-weight: 700;
+    box-shadow: inset 3px 0 0 var(--brand);
+}
+
+/* Categories / Brands dropdowns: tap the heading to open or close */
+.sidebar-group {
+    margin-top: .75rem;
+    padding-top: .75rem;
+    border-top: 1px solid var(--line);
+}
+.sidebar-group summary {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem .75rem;
+    border-radius: var(--r-input);
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    list-style: none;
+}
+.sidebar-group summary::-webkit-details-marker { display: none; }
+.sidebar-group summary:hover { background: var(--page); color: var(--brand); }
+.sidebar-group summary::after {
+    content: "";
+    width: .5rem;
+    height: .5rem;
+    margin-left: auto;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform .15s;
+}
+.sidebar-group[open] summary::after { transform: rotate(-135deg) translateY(-2px); }
+.sidebar-count {
+    padding: .05rem .5rem;
+    border-radius: var(--r-pill);
+    background: var(--page);
+    color: var(--ink-soft);
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+/* Admin-only group: soft gold heading so it stands apart from the shop lists */
+.sidebar-admin summary { background: var(--gold-soft); color: var(--brand-deep); }
+.sidebar-admin summary:hover { background: var(--gold-soft); color: var(--brand); }
+
+/* Phones: the sidebar is short now, so show it above the products */
+@media (max-width: 900px) {
+    .page-layout .sidebar { order: -2; }
+}
 
 .section-head { margin-bottom: 1.25rem; }
 .section-head h2 { margin: 0; font-size: 1.6rem; }
@@ -623,6 +724,39 @@ a:hover { color: var(--brand-deep); }
 }
 .orders-empty p { margin: 0; color: var(--ink-soft); }
 
+/* ── Admin: product form and list (Task 9) ── */
+.product-form .inline-actions { padding-top: .25rem; }
+.product-form input[type="file"] {
+    padding: .55rem;
+    border-style: dashed;
+    background: var(--page);
+    cursor: pointer;
+}
+.image-preview {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: .75rem;
+}
+.image-preview img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: var(--r-input);
+    border: 1px solid var(--line);
+}
+.image-preview span { font-size: .9rem; }
+.cell-thumb { width: 72px; }
+.cell-thumb img {
+    display: block;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: var(--page);
+}
+.cell-price { white-space: nowrap; font-weight: 600; }
+
 /* ── Footer ── */
 .site-footer {
     margin-top: auto;
@@ -664,8 +798,6 @@ a:hover { color: var(--brand-deep); }
 }
 
 @media (max-width: 560px) {
-    .header-nav { margin-left: 0; }
-    .nav-account { padding-left: 0; border-left: 0; }
     .field-row { grid-template-columns: 1fr; }
     .inline-actions { padding-top: 0; }
     .account-banner { flex-wrap: wrap; }
@@ -678,3 +810,38 @@ a:hover { color: var(--brand-deep); }
     * { scroll-behavior: auto !important; }
 }
 html { scroll-behavior: smooth; }
+
+/* ── Shop: product cards, sidebar filters, product page (Task 10) ── */
+.section-head p { margin: .35rem 0 0; }
+.product-media { display: block; background: var(--page); }
+.product-media img { display: block; }
+.product-card h3 a { color: var(--ink); text-decoration: none; }
+.product-card h3 a:hover { color: var(--brand); }
+.product-card .actions .btn { flex: 1; }
+
+.product-page { padding-block: 2rem 4rem; }
+.breadcrumb { display: flex; gap: .5rem; margin-bottom: 1.5rem; font-size: .95rem; color: var(--ink-soft); }
+.breadcrumb a { color: var(--ink-soft); }
+.product-detail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+}
+.product-detail-media {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+    overflow: hidden;
+}
+.product-detail-media img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+.product-brand { font-weight: 600; text-decoration: none; }
+.product-detail-info h1 { margin: .35rem 0 .75rem; font-size: clamp(1.7rem, 3vw, 2.4rem); }
+.product-price { margin: 0 0 1.5rem; font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--brand); }
+.product-section { margin: 2rem 0 1.5rem; }
+.product-section h2 { margin: 0 0 .5rem; font-size: 1.1rem; }
+.product-section p { margin: 0; max-width: 60ch; }
+
+@media (max-width: 900px) {
+    .product-detail { grid-template-columns: 1fr; gap: 1.5rem; }
+}

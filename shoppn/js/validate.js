@@ -139,3 +139,47 @@ if (categoryForm) {
         setLoading(categoryForm, 'Saving…');
     });
 }
+
+
+// ── Product form (Task 9) — same rules as add/update_product_action.php ──
+const productForm = document.getElementById('product-form');
+if (productForm) {
+    productForm.addEventListener('submit', function (e) {
+        const f = productForm.elements;
+        const price = f.product_price.value.trim();
+        const file = f.product_image.files[0];
+        const imageRequired = productForm.dataset.imageRequired === 'yes';
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        const maxSize = 2 * 1024 * 1024;   // 2 MB
+
+        // Image: required when adding; if chosen, must be an allowed type and size
+        let imageOk = true;
+        let imageMsg = '';
+        if (!file && imageRequired) {
+            imageOk = false; imageMsg = 'Choose a product image.';
+        } else if (file && !allowedTypes.includes(file.type)) {
+            imageOk = false; imageMsg = 'The image must be a JPG, PNG, GIF or WEBP file.';
+        } else if (file && file.size > maxSize) {
+            imageOk = false; imageMsg = 'The image must be 2 MB or smaller.';
+        }
+
+        const valid = runChecks([
+            [f.product_title, 'title-error', f.product_title.value.trim().length >= 2,
+                'Enter a title (2–200 characters).'],
+            [f.product_cat, 'cat-error', f.product_cat.value !== '',
+                'Choose a category.'],
+            [f.product_brand, 'brand-error', f.product_brand.value !== '',
+                'Choose a brand.'],
+            [f.product_price, 'price-error', /^\d{1,7}(\.\d{1,2})?$/.test(price) && parseFloat(price) > 0,
+                'Enter a price greater than 0, e.g. 120 or 120.50.'],
+            [f.product_keywords, 'keywords-error', f.product_keywords.value.trim().length <= 100,
+                'Keywords must be 100 characters or fewer.'],
+            [f.product_desc, 'desc-error', f.product_desc.value.trim().length <= 500,
+                'Description must be 500 characters or fewer.'],
+            [f.product_image, 'image-error', imageOk, imageMsg],
+        ]);
+
+        if (!valid) { e.preventDefault(); return; }
+        setLoading(productForm, 'Saving…');
+    });
+}

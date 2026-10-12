@@ -1,18 +1,18 @@
 <?php
-// Action: handles the Edit Brand form submit.
+// Action: handles the Edit Brand form submit (Task 6).
 // Reads $_POST, validates, calls the controller, sets a message, redirects. No SQL, no HTML.
 require_once __DIR__ . '/../core/core.php';
 require_once __DIR__ . '/../controllers/ProductController.php';
 
-// require_admin()
+// Brief: require_admin()
 require_admin();
 
-//  POST only
+// Brief: POST only
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirect('views/admin/brand.php');
 }
 
-// validate brand_id (must be a positive integer) and brand_name
+// Brief: validate brand_id (must be a positive integer) and brand_name
 $id   = filter_var($_POST['brand_id'] ?? '', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 $name = trim(strip_tags($_POST['brand_name'] ?? ''));
 
@@ -21,7 +21,7 @@ if ($id === false) {
     redirect('views/admin/brand.php');
 }
 if (!preg_match("/^[A-Za-z0-9][A-Za-z0-9 &'().,\-]{1,99}$/", $name)) {
-    $_SESSION['error'] = 'Brand name must be 2-100 characters: letters, numbers, spaces and & \' ( ) . , - only.';
+    $_SESSION['error'] = 'Brand name must be 2–100 characters: letters, numbers, spaces and & \' ( ) . , - only.';
     redirect('views/admin/brand.php?edit_id=' . $id);
 }
 
@@ -33,7 +33,7 @@ if (!$ctrl->getBrandById($id)) {
     redirect('views/admin/brand.php');
 }
 
-// call ProductController → updateBrand(), redirect with a success message
+// Brief: call ProductController → updateBrand(), redirect with a success message
 if ($ctrl->updateBrand($id, $name)) {
     $_SESSION['success'] = 'Brand updated.';
 } else {
