@@ -22,22 +22,33 @@ $minimal = !empty($minimal_header);
         <form class="search" action="<?= url('views/search_results.php') ?>" method="get">
             <label for="user_query" class="visually-hidden">Search products</label>
             <input id="user_query" name="user_query" type="search" maxlength="100"
-                   placeholder="Search products" value="<?= e($_GET['user_query'] ?? '') ?>">
+                   placeholder="Search wax prints, kente, dresses…" value="<?= e($_GET['user_query'] ?? '') ?>">
             <button type="submit">Search</button>
         </form>
 
-        <nav>
+        <nav class="header-nav" aria-label="Main">
             <ul class="nav-links">
                 <li><a href="<?= url() ?>">Home</a></li>
 
+                <?php if (is_admin()): ?>
+                    <li><a href="<?= url('views/admin/brand.php') ?>">Brand</a></li>
+                    <li><a href="<?= url('views/admin/category.php') ?>">Category</a></li>
+                <?php endif; ?>
+            </ul>
 
+            <!-- Account area: kept separate from the navigation links -->
+            <ul class="nav-links nav-account">
                 <?php if (is_logged_in()): ?>
-                    <li>Welcome, <?= e($_SESSION['customer_name'] ?? '') ?></li>
+                    <?php $navName = $_SESSION['customer_name'] ?? ''; ?>
+                    <li class="nav-welcome">
+                        <span class="nav-avatar" aria-hidden="true"><?= e(mb_strtoupper(mb_substr($navName, 0, 1))) ?></span>
+                        Welcome, <?= e($navName) ?>
+                    </li>
                     <li><a href="<?= url('views/account/my_account.php') ?>">My account</a></li>
                     <li><a href="<?= url('logout.php') ?>">Log out</a></li>
                 <?php else: ?>
                     <li><a href="<?= url('views/register.php') ?>">Register</a></li>
-                    <li><a href="<?= url('views/login.php') ?>">Log in</a></li>
+                    <li><a class="nav-cta" href="<?= url('views/login.php') ?>">Log in</a></li>
                 <?php endif; ?>
             </ul>
         </nav>

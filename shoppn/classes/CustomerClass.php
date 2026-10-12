@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . '/../core/db_class.php';
 
 class CustomerClass extends Database
@@ -45,7 +44,7 @@ class CustomerClass extends Database
     }
 
     /**
-     *SELECT * FROM customer WHERE customer_email = ?
+     * SELECT * FROM customer WHERE customer_email = ?
      * @return array|false  one customer row, or false if not found
      */
     public function getCustomerByEmail(string $email)
@@ -59,7 +58,7 @@ class CustomerClass extends Database
     }
 
     /**
-     *find the customer, then check the password with password_verify().
+     * find the customer, then check the password with password_verify().
      * @return array|false  the customer row on success, false on failure
      */
     public function login(string $email, string $pass)
@@ -70,5 +69,24 @@ class CustomerClass extends Database
             return $row;
         }
         return false;
+    }
+
+    /**
+     * My account page — one customer's details by id.
+     * The password hash is deliberately NOT selected.
+     * @return array|false  the customer's details, or false if not found
+     */
+    public function getCustomerById(int $id)
+    {
+        $stmt = $this->conn->prepare(
+            'SELECT customer_id, customer_name, customer_email, customer_country,
+                    customer_city, customer_contact, user_role
+             FROM customer WHERE customer_id = ?'
+        );
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row ?: false;
     }
 }

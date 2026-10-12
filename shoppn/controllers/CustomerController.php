@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../classes/CustomerClass.php';
 
 class CustomerController
@@ -11,7 +12,7 @@ class CustomerController
     }
 
     /**
-     *register a new customer.
+     * register a new customer.
      * @return array ['success' => true, 'customer_id' => N] or ['success' => false, 'error' => '...']
      */
     public function register(array $data): array
@@ -36,7 +37,7 @@ class CustomerController
     }
 
     /**
-     *log a customer in via the Model's login().
+     * log a customer in via the Model's login().
      * @return array the customer row on success, or ['error' => '...'] on failure
      */
     public function login(string $email, string $pass): array
@@ -47,5 +48,11 @@ class CustomerController
             return ['error' => 'Invalid email or password.'];
         }
         return $customer;
+    }
+
+    /** My account page — the logged-in customer's details, or false. */
+    public function getCustomerById(int $id)
+    {
+        return $this->customer->getCustomerById($id);
     }
 }

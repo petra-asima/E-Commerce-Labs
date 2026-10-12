@@ -27,8 +27,10 @@ if (mb_strlen($name) < 2 || mb_strlen($name) > 100) {
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 50) {
     $errors[] = 'Enter a valid email address (max 50 characters).';
 }
-if (!preg_match('/^(?=.*\d).{8,72}$/', $pass)) {
-    $errors[] = 'Password must be 8-72 characters and include at least one number.';
+// Strong password: upper, lower, digit, special character, no spaces, 8–72 characters
+if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])(?!.*\s).{8,72}$/', $pass)) {
+    $errors[] = 'Password must be 8-72 characters with an uppercase letter, a lowercase letter, a number and a special character (no spaces).';
+
 }
 if (!in_array($country, COUNTRIES, true)) {
     $errors[] = 'Choose a country from the list.';
@@ -37,7 +39,7 @@ if (mb_strlen($city) < 2 || mb_strlen($city) > 30) {
     $errors[] = 'City must be 2-30 characters.';
 }
 
-//Phone: build the full number, e.g. GH + "024 123 4567" "+233241234567"
+// build the full number, e.g. GH + "024 123 4567" "+233241234567"
 $fullContact = '';
 if (!isset(DIAL_CODES[$dial])) {
     $errors[] = 'Choose a country code.';
