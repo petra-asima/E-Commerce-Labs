@@ -1,26 +1,24 @@
-/* ============================================================
+/* 
    shoppn — African prints store
-   Plain colours only: burgundy (brand), gold (accent),
-   deep wine and soft blush. No patterns or images.
-   ============================================================ */
+ */
 
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap');
 
 /* ── Theme tokens ── */
 :root {
-    --brand: #7a1f3d;         /* burgundy: buttons, links, hero */
-    --brand-deep: #561229;    /* burgundy hover / darker text */
-    --brand-tint: #f6eaee;    /* soft burgundy fill: selected rows */
-    --gold: #d6a648;          /* gold accent: highlights, focus, avatar */
+    --brand: #7a1f3d;         
+    --brand-deep: #561229;    
+    --brand-tint: #f6eaee;    
+    --gold: #d6a648;          
     --gold-soft: #f3e3bf;
-    --wine: #3a0f1f;          /* deep wine: footer, darkest surfaces */
-    --blush: #f6e7ec;         /* soft rose: page tints, auth background */
-    --danger: #b3261e;        /* errors */
-    --ink: #2a1c21;           /* main text */
-    --ink-soft: #6b5d62;      /* secondary text */
-    --page: #f6f5f3;          /* page background */
-    --surface: #ffffff;       /* panels */
-    --line: #e7e1e2;          /* borders */
+    --wine: #3a0f1f;         
+    --blush: #f6e7ec;        
+    --danger: #b3261e;        
+    --ink: #2a1c21;           
+    --ink-soft: #6b5d62;      
+    --page: #f6f5f3;          
+    --surface: #ffffff;       
+    --line: #e7e1e2;          
 
     --r-panel: 14px;
     --r-input: 10px;
@@ -227,6 +225,63 @@ a:hover { color: var(--brand-deep); }
     .main-nav { display: none; } /* phones: the logo is the Home link */
 }
 
+/* Cart icon at the end of the top bar */
+.header-top { grid-template-columns: auto auto minmax(0, 1fr) auto auto; }
+.cart-btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--ink);
+    text-decoration: none;
+}
+.cart-btn:hover,
+.cart-btn[aria-current="page"] { background: var(--brand-tint); color: var(--brand); }
+.cart-btn .material-symbols-outlined { font-size: 27px; }
+.cart-badge {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    display: grid;
+    place-items: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border: 2px solid var(--surface);
+    border-radius: var(--r-pill);
+    background: var(--brand);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
+.material-symbols-outlined {
+    font-size: 24px;
+    line-height: 1;
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+.cart-btn[aria-current="page"] .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+
+@media (max-width: 900px) {
+    .header-top {
+        grid-template-columns: auto auto 1fr auto;
+        grid-template-areas:
+            "logo home account cart"
+            "search search search search";
+    }
+    .cart-btn { grid-area: cart; }
+}
+@media (max-width: 560px) {
+    .header-top {
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas:
+            "logo account cart"
+            "search search search";
+    }
+}
+
 /* Login / register: logo only, kept in view while scrolling */
 .site-header--minimal {
     position: sticky;
@@ -234,6 +289,7 @@ a:hover { color: var(--brand-deep); }
     z-index: 50;
 }
 .site-header--minimal .header-top { grid-template-columns: 1fr; justify-items: center; }
+.site-header--minimal .logo { justify-self: center; }
 
 /* ── Buttons ── */
 .btn {
@@ -368,6 +424,7 @@ a:hover { color: var(--brand-deep); }
     font-weight: 600;
 }
 
+
 /* Admin-only group: soft gold heading so it stands apart from the shop lists */
 .sidebar-admin summary { background: var(--gold-soft); color: var(--brand-deep); }
 .sidebar-admin summary:hover { background: var(--gold-soft); color: var(--brand); }
@@ -396,7 +453,7 @@ a:hover { color: var(--brand-deep); }
     color: var(--ink);
 }
 
-/* Product grid (used from Task 10) */
+/* Product grid */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -724,7 +781,7 @@ a:hover { color: var(--brand-deep); }
 }
 .orders-empty p { margin: 0; color: var(--ink-soft); }
 
-/* ── Admin: product form and list (Task 9) ── */
+/* ── Admin: product form and list ── */
 .product-form .inline-actions { padding-top: .25rem; }
 .product-form input[type="file"] {
     padding: .55rem;
@@ -811,7 +868,7 @@ a:hover { color: var(--brand-deep); }
 }
 html { scroll-behavior: smooth; }
 
-/* ── Shop: product cards, sidebar filters, product page (Task 10) ── */
+/* ── Shop: product cards, sidebar filters, product page ── */
 .section-head p { margin: .35rem 0 0; }
 .product-media { display: block; background: var(--page); }
 .product-media img { display: block; }
@@ -844,4 +901,555 @@ html { scroll-behavior: smooth; }
 
 @media (max-width: 900px) {
     .product-detail { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+
+/* ── Cart ── */
+.notice-row { padding-top: 1rem; }
+.notice-row .alert { margin: 0; display: flex; flex-wrap: wrap; gap: .25rem 1rem; align-items: center; }
+.notice-row .alert a { color: inherit; font-weight: 700; }
+
+.cart-page { padding-block: 2.5rem 4rem; }
+.cart-page .panel--flush { padding: 0; overflow: hidden; }
+.cart-table th:first-child,
+.cart-table td:first-child { width: 5.5rem; }
+.cell-check input { width: 1.15rem; height: 1.15rem; accent-color: var(--brand); }
+.cart-product {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+}
+.cart-product:hover { color: var(--brand); }
+.cart-product img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: var(--r-input);
+    background: var(--page);
+}
+.cell-qty input {
+    width: 4rem;
+    padding: .45rem .5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-input);
+    font: inherit;
+    text-align: center;
+}
+.cell-qty input:focus { outline: 2px solid var(--gold); border-color: var(--brand); }
+.cell-qty input.invalid { border-color: var(--danger); }
+.cart-subtotal th,
+.cart-subtotal td {
+    padding: 1.1rem 1.75rem;
+    border-top: 2px solid var(--line);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: right;
+}
+.cart-subtotal th { background: none; color: var(--ink); text-transform: none; letter-spacing: 0; }
+.cart-subtotal td { color: var(--brand); }
+.cart-error { margin: 0; padding: 0 1.75rem 1rem; }
+.cart-error:empty { display: none; }
+
+.cart-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+.cart-actions-edit,
+.cart-actions-go { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+@media (max-width: 560px) {
+    .cart-table th:first-child,
+    .cart-table td:first-child { width: 1%; }
+    .cart-table thead th { font-size: .8rem; }
+    .cart-subtotal th, .cart-subtotal td { font-size: 1rem; }
+    .cart-product img { display: none; }
+    .cart-table th, .cart-table td { padding-inline: .6rem; }
+    .cart-table th:first-child, .cart-table td:first-child { padding-left: 1rem; }
+    .cart-table th:last-child, .cart-table td:last-child { padding-right: 1rem; white-space: nowrap; }
+    .cell-qty input { width: 3rem; }
+    .cart-actions, .cart-actions-edit, .cart-actions-go { flex-direction: column; align-items: stretch; width: 100%; }
+}
+
+/* ── Home: Shop by category tiles (top of the right-hand column) ── */
+.main-col { min-width: 0; }
+.category-tiles { margin-bottom: 2.75rem; }
+.category-tiles h2,
+.main-col .section-head h2 { margin: 0 0 1.25rem; font-size: 1.6rem; }
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 1.25rem;
+}
+.tile { display: block; color: var(--ink); text-decoration: none; }
+.tile-media {
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: var(--r-panel);
+    background: var(--brand-tint);
+}
+.tile-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .35s ease;
+}
+.tile:hover .tile-media img { transform: scale(1.05); }
+.tile-name {
+    display: block;
+    margin-top: .75rem;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+.tile:hover .tile-name { color: var(--brand); }
+.tile-count { display: block; margin-top: .1rem; color: var(--ink-soft); font-size: .9rem; }
+
+@media (max-width: 900px) {
+    .page-layout .main-col { order: 0; }
+}
+@media (max-width: 560px) {
+    .tile-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .tile-name { font-size: 1rem; }
+    .drop-panel--mega { min-width: 0; }
+}
+
+/* ── Admin bar: back arrow + Brands / Categories / Products tabs ── */
+.admin-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+}
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .45rem .9rem .45rem .6rem;
+    border-radius: var(--r-pill);
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+}
+.back-link:hover { background: var(--brand-tint); color: var(--brand); }
+.back-link .material-symbols-outlined { font-size: 22px; transition: transform .15s; }
+.back-link:hover .material-symbols-outlined { transform: translateX(-3px); }
+
+.admin-tabs {
+    display: flex;
+    gap: .25rem;
+    padding: .3rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+}
+.admin-tabs a {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .45rem .95rem;
+    border-radius: var(--r-pill);
+    color: var(--ink-soft);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.admin-tabs a:hover { color: var(--brand); background: var(--page); }
+.admin-tabs a[aria-current="page"] { background: var(--brand); color: #fff; }
+.admin-tabs .material-symbols-outlined { font-size: 20px; }
+.tab-count {
+    display: grid;
+    place-items: center;
+    min-width: 1.35rem;
+    height: 1.35rem;
+    padding: 0 .35rem;
+    border-radius: var(--r-pill);
+    background: var(--page);
+    color: var(--ink-soft);
+    font-size: .75rem;
+    font-weight: 700;
+}
+.admin-tabs a[aria-current="page"] .tab-count { background: rgba(255, 255, 255, .2); color: #fff; }
+
+@media (max-width: 560px) {
+    .admin-tabs { width: 100%; overflow-x: auto; }
+    .admin-tabs a { flex: 1; justify-content: center; gap: .3rem; padding-inline: .45rem; font-size: .9rem; }
+    .tab-count { min-width: 1.15rem; height: 1.15rem; padding: 0 .25rem; font-size: .7rem; }
+    .admin-tabs .material-symbols-outlined { display: none; }
+}
+
+/* ── Login back link, password toggle, hero collage, footer, tags, related products, card titles ── */
+
+/* Login / register header: back link on the left, logo centred */
+.site-header--minimal .header-top { position: relative; }
+.site-header--minimal .header-top { position: relative; }
+.header-back { position: absolute; left: 0; top: 50%; transform: translateY(-50%); }
+@media (max-width: 560px) { .header-back-text { display: none; } }
+
+/* Show / hide password */
+.password-wrap { position: relative; }
+.password-wrap input { width: 100%; padding-right: 3rem; }
+.password-toggle {
+    position: absolute;
+    right: .4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+}
+.password-toggle:hover { background: var(--brand-tint); color: var(--brand); }
+.password-toggle .material-symbols-outlined { font-size: 22px; }
+
+/* Home hero: text left, photo collage right */
+.hero-grid--split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
+}
+.hero-collage { display: grid; gap: .9rem; height: 340px; }
+.hero-collage a { display: block; overflow: hidden; border-radius: var(--r-panel); background: var(--brand-deep); }
+.hero-collage img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.hero-collage a:hover img { transform: scale(1.04); }
+.hero-collage--1 { grid-template-columns: 1fr; }
+.hero-collage--2 { grid-template-columns: 1fr 1fr; }
+.hero-collage--3 { grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr; }
+.hero-collage--3 a:first-child { grid-row: 1 / 3; }
+@media (max-width: 900px) {
+    .hero-grid--split { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-collage { height: 220px; }
+}
+
+/* Footer: four columns, contact with icons */
+.footer-grid { grid-template-columns: 1.6fr 1fr 1fr 1.2fr; }
+.footer-contact li { display: flex; align-items: center; gap: .5rem; }
+.footer-contact .material-symbols-outlined { font-size: 19px; color: var(--gold); }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+/* Product page: keyword tags */
+.keyword-tags { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: 1.5rem; }
+.keyword-label { margin-right: .25rem; color: var(--ink-soft); font-size: .95rem; }
+.tag {
+    padding: .3rem .85rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: .9rem;
+    text-decoration: none;
+}
+.tag:hover { border-color: var(--brand); background: var(--brand-tint); color: var(--brand); }
+
+/* Product page: More from this category */
+.related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--line); }
+.related-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+.related-head h2 { margin: 0; font-size: 1.5rem; }
+.related-head a { color: var(--brand); font-weight: 600; text-decoration: none; }
+.related-head a:hover { text-decoration: underline; }
+
+/* Product cards: titles always take two lines, so cards line up */
+.product-card h3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.6em;
+    line-height: 1.3;
+}
+
+/* Login / register header on every screen size: one row, logo centred, back arrow on the left */
+.site-header--minimal .header-top {
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+    min-height: 72px;
+    padding-block: 0;
+}
+.site-header--minimal .logo { grid-area: auto; justify-self: center; }
+
+/* ══ Top bar: logo · Home · search · account · cart ══ */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 2px 12px rgba(58, 15, 31, .06);
+}
+.header-top {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+    grid-template-areas: none;
+    align-items: center;
+    gap: 1rem 2rem;
+    padding-block: 1rem;
+}
+.header-top .logo {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -.03em;
+    color: var(--brand);
+    text-decoration: none;
+}
+
+/* Home link */
+.main-nav a {
+    color: var(--ink);
+    font-weight: 500;
+    text-decoration: none;
+    padding-block: .3rem;
+}
+.main-nav a:hover { color: var(--brand); }
+.main-nav a[aria-current="page"] { color: var(--brand); font-weight: 700; box-shadow: inset 0 -2px 0 var(--brand); }
+
+/* Search bar */
+.header-top .search {
+    display: flex;
+    width: 100%;
+    max-width: 620px;
+    justify-self: center;
+    padding: 4px;
+    background: var(--page);
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+}
+.header-top .search:focus-within { border-color: var(--brand); background: var(--surface); }
+.header-top .search input {
+    flex: 1;
+    min-width: 0;
+    padding: .5rem 1.1rem;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    color: var(--ink);
+}
+.header-top .search input:focus { outline: none; }
+.header-top .search button {
+    padding: .5rem 1.4rem;
+    border: 0;
+    border-radius: var(--r-pill);
+    background: var(--brand);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+.header-top .search button:hover { background: var(--brand-deep); }
+
+/* Account links, side by side (no bullets) */
+.account-nav > ul {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-weight: 500;
+    white-space: nowrap;
+}
+.account-nav a { color: var(--ink); text-decoration: none; }
+.account-nav a:hover,
+.account-nav a[aria-current="page"] { color: var(--brand); }
+.account-nav .nav-cta {
+    padding: .5rem 1.2rem;
+    border-radius: var(--r-pill);
+    background: var(--brand);
+    color: #fff;
+}
+.account-nav .nav-cta:hover { background: var(--brand-deep); color: #fff; }
+.nav-welcome { display: flex; align-items: center; gap: .5rem; color: var(--ink-soft); }
+.nav-avatar {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--brand);
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: .95rem;
+    font-weight: 800;
+}
+
+/* Cart bag with the count badge */
+.cart-btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--ink);
+    text-decoration: none;
+}
+.cart-btn:hover,
+.cart-btn[aria-current="page"] { background: var(--brand-tint); color: var(--brand); }
+.cart-btn .material-symbols-outlined { font-size: 27px; line-height: 1; }
+.cart-btn .cart-badge {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    bottom: auto;
+    left: auto;
+    display: grid;
+    place-items: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border: 2px solid var(--surface);
+    border-radius: var(--r-pill);
+    background: var(--brand);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* Tablets: search moves to its own row underneath */
+@media (max-width: 900px) {
+    .header-top {
+        grid-template-columns: auto auto 1fr auto;
+        grid-template-areas:
+            "logo home account cart"
+            "search search search search";
+        gap: .75rem 1rem;
+    }
+    .header-top .logo   { grid-area: logo; }
+    .main-nav           { grid-area: home; }
+    .header-top .search { grid-area: search; max-width: none; }
+    .account-nav        { grid-area: account; justify-self: end; }
+    .cart-btn           { grid-area: cart; }
+    .nav-welcome-text   { display: none; }
+}
+/* Phones */
+@media (max-width: 560px) {
+    .header-top {
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas:
+            "logo account cart"
+            "search search search";
+    }
+    .main-nav { display: none; }
+    .account-nav > ul { gap: .9rem; font-size: .95rem; }
+}
+
+/* Login / register: logo in the middle, back arrow on the left */
+.site-header--minimal .header-top {
+    position: relative;
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+    justify-items: center;
+    min-height: 72px;
+    padding-block: 0;
+}
+.site-header--minimal .logo { grid-area: auto; justify-self: center; }
+.header-back { position: absolute; left: 0; top: 50%; transform: translateY(-50%); }
+
+/* ── Admin links in the top bar (admins only), next to Home ── */
+.main-nav { display: flex; align-items: center; gap: 1.5rem; white-space: nowrap; }
+.main-nav .admin-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--line);
+}
+/* Keep the search bar usable when the admin links are showing */
+@media (min-width: 901px) {
+    .header-top { column-gap: 1.25rem; }
+    .main-nav { gap: 1.1rem; }
+    .main-nav .admin-links { gap: 1rem; padding-left: 1.1rem; }
+    .account-nav > ul { gap: 1rem; }
+    .header-top .search { min-width: 260px; }
+}
+/* Smaller laptops: hide them here; the sidebar and the admin bar still have them */
+@media (max-width: 1240px) {
+    .main-nav .admin-links { display: none; }
+}
+/* ══ Top bar on two rows: logo · Home (+ admin links) · account · cart, then the search bar underneath ══ */
+@media (min-width: 901px) {
+    .header-top {
+        grid-template-columns: auto auto 1fr auto auto;
+        grid-template-areas:
+            "logo home . account cart"
+            "search search search search search";
+        column-gap: 2rem;
+        row-gap: .85rem;
+        padding-block: 1rem .9rem;
+    }
+    .header-top .logo   { grid-area: logo; }
+    .main-nav           { grid-area: home; gap: 1.5rem; }
+    .main-nav .admin-links { display: flex; gap: 1.25rem; padding-left: 1.5rem; }
+    .account-nav        { grid-area: account; }
+    .account-nav > ul   { gap: 1.25rem; }
+    .cart-btn           { grid-area: cart; }
+    .header-top .search {
+        grid-area: search;
+        min-width: 0;
+        max-width: none;
+        width: 100%;
+    }
+    .header-top .search input { padding-block: .6rem; }
+}
+/* Only very small laptops hide the admin links (the admin bar on admin pages still has them) */
+@media (min-width: 901px) and (max-width: 1000px) {
+    .main-nav .admin-links { display: none; }
+}
+/* Phones: account links on one line (the avatar hides to save space) */
+@media (max-width: 560px) {
+    .main-nav { display: none; }   /* phones: the logo is the Home link */
+    .nav-welcome { display: none; }
+    .account-nav > ul { flex-wrap: nowrap; gap: .9rem; }
+}
+
+/* ══ Smaller search bar, centred under the top bar ══ */
+@media (min-width: 901px) {
+    .header-top .search {
+        width: 100%;
+        max-width: 480px;      /* change this number to make it wider or narrower */
+        justify-self: center;  /* use "start" to line it up under the logo instead */
+    }
+    .header-top .search input { padding-block: .45rem; font-size: .95rem; }
+}
+
+/* ══ Slim search bar in the top bar ══ */
+@media (min-width: 901px) {
+    .header-top {
+        grid-template-columns: auto auto minmax(180px, 1fr) auto auto;
+        grid-template-areas: "logo home search account cart";
+        column-gap: 1.5rem;
+        row-gap: 0;
+        padding-block: .8rem;
+    }
+    .header-top .search {
+        grid-area: search;
+        width: 100%;
+        max-width: 340px;      /* make this smaller or bigger to change the width */
+        min-width: 0;
+        justify-self: center;
+        padding: 2px;
+    }
+    .header-top .search input { padding: .3rem .9rem; font-size: .88rem; }
+    .header-top .search button { padding: .3rem 1rem; font-size: .85rem; }
+}
+/* Smaller laptops: hide the admin links in the top bar so search keeps its space
+   (admins still have the Brands / Categories / Products tabs on the admin pages) */
+@media (min-width: 901px) and (max-width: 1180px) {
+    .main-nav .admin-links { display: none; }
 }

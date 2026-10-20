@@ -1,19 +1,19 @@
 <?php
-// Admin: manage brands — add (Task 5) and edit (Task 6) in one page.
+// Admin: manage brands — add and edit in one page.
 require_once __DIR__ . '/../../core/core.php';
 require_once __DIR__ . '/../../controllers/ProductController.php';
 
-// require_admin() at the top — before any HTML
+// Admins only, checked before any output
 require_admin();
 
-//show success / error messages, then clear them
+// Show success / error messages, then clear them
 $success = $_SESSION['success'] ?? null;
 $error   = $_SESSION['error'] ?? null;
 unset($_SESSION['success'], $_SESSION['error']);
 
 $ctrl = new ProductController();
 
-//  if ?edit_id=N is present, load that brand into the form
+// If ?edit_id=N is present, load that brand into the form
 $editBrand = null;
 if (isset($_GET['edit_id'])) {
     $editId    = filter_var($_GET['edit_id'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
@@ -24,13 +24,14 @@ if (isset($_GET['edit_id'])) {
     }
 }
 
-// fetch all brands via ProductController → getAllBrands()
+// Fetch all brands via ProductController → getAllBrands()
 $brands = $ctrl->getAllBrands();
 
 $page_title = 'Brands | Admin';
 require __DIR__ . '/../layout/header.php';
 ?>
 <main id="main" class="wrap admin-page">
+<?php require __DIR__ . '/../layout/admin_nav.php'; ?>
 
     <div class="admin-head">
         <h1>Brands</h1>
@@ -45,7 +46,7 @@ require __DIR__ . '/../layout/header.php';
     <?php endif; ?>
 
     <?php if ($editBrand): ?>
-        <!-- Task 6: edit mode — form targets update_brand_action.php -->
+        <!-- Edit mode — form targets update_brand_action.php -->
         <section class="panel">
             <h2>Edit brand</h2>
             <form id="brand-form" class="inline-form" method="POST"
@@ -64,7 +65,7 @@ require __DIR__ . '/../layout/header.php';
             </form>
         </section>
     <?php else: ?>
-        <!-- Task 5: add mode — one text input + submit button -->
+        <!-- Add mode -->
         <section class="panel">
             <h2>Add a brand</h2>
             <form id="brand-form" class="inline-form" method="POST"

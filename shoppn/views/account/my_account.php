@@ -1,6 +1,6 @@
 <?php
 // My account page — logged-in customers only.
-// Details come from the database through the controllers (no SQL here).
+// Details are loaded through the controllers.
 require_once __DIR__ . '/../../core/core.php';
 require_once __DIR__ . '/../../controllers/CustomerController.php';
 require_once __DIR__ . '/../../controllers/ProductController.php';

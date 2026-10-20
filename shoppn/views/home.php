@@ -54,6 +54,7 @@ require __DIR__ . '/layout/header.php';
     <div class="wrap page-layout">
         <?php require __DIR__ . '/layout/sidebar.php'; ?>
 
+        <div class="main-col">
         <section id="products" class="products" aria-labelledby="products-heading">
             <div class="section-head">
                 <h2 id="products-heading"><?= e($heading) ?></h2>
@@ -73,6 +74,7 @@ require __DIR__ . '/layout/header.php';
                 <?php require __DIR__ . '/layout/product_grid.php'; ?>
             <?php endif; ?>
         </section>
+        </div>
     </div>
 </main>
 <?php require __DIR__ . '/layout/footer.php'; ?>

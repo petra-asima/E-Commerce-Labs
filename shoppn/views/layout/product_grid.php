@@ -1,6 +1,6 @@
 <?php
 // Product cards, shared by home.php and search_results.php so both use the same card format.
-// Expects $products (an array of rows from ProductController). Display only — no SQL.
+// Expects $products (an array of rows from ProductController).
 ?>
 <div class="product-grid">
     <?php foreach ($products as $p): ?>

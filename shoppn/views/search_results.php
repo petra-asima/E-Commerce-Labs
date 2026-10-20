@@ -1,9 +1,9 @@
 <?php
-// Search results page (Task 10). Gets data through ProductController — no SQL here.
+// Search results page.
 require_once __DIR__ . '/../core/core.php';
 require_once __DIR__ . '/../controllers/ProductController.php';
 
-// Brief: read ?user_query from GET
+// Read ?user_query from GET
 $query = trim(strip_tags($_GET['user_query'] ?? ''));
 $query = mb_substr($query, 0, 100);   // same limit as the search box
 
@@ -34,7 +34,7 @@ require __DIR__ . '/layout/header.php';
                     <p>Check the spelling, try a shorter word, or <a href="<?= url() ?>">browse all products</a>.</p>
                 </div>
             <?php elseif (!empty($products)): ?>
-                <!-- Brief: same card format as home.php -->
+                <!-- Same card format as home.php -->
                 <?php require __DIR__ . '/layout/product_grid.php'; ?>
             <?php endif; ?>
         </section>

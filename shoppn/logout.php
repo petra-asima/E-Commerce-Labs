@@ -1,5 +1,5 @@
 <?php
-//Ends the session completely, then returns to the home page.
+// Ends the session completely, then returns to the home page.
 require_once __DIR__ . '/core/core.php';
 
 $_SESSION = [];

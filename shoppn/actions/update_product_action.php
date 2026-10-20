@@ -1,10 +1,10 @@
 <?php
-// Action: handles the Edit Product form submit (Task 9).
+// Handles the Edit Product form submit.
 // Reads $_POST and $_FILES, validates, saves a new image if given, calls the controller, redirects.
 require_once __DIR__ . '/../core/core.php';
 require_once __DIR__ . '/../controllers/ProductController.php';
 
-// Brief: require_admin(). POST only.
+// Admins only, POST only
 require_admin();
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirect('views/admin/product.php');
@@ -77,7 +77,7 @@ if ($errors) {
     redirect('views/admin/product.php?edit_id=' . $id);
 }
 
-// ── 5. Brief: move a new image, otherwise keep the existing filename ──
+// ── 5. Move a new image, otherwise keep the existing filename ──
 // The existing filename comes from the database, not a hidden form field,
 // so nobody can point the product at a file they choose.
 $filename = $existing['product_image'] ?? '';

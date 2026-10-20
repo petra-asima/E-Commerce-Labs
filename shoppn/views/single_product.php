@@ -1,9 +1,9 @@
 <?php
-// Single product page (Task 10). Gets data through ProductController — no SQL here.
+// Single product page.
 require_once __DIR__ . '/../core/core.php';
 require_once __DIR__ . '/../controllers/ProductController.php';
 
-// Brief: require a valid ?pro_id=N — redirect home if missing or invalid
+// Require a valid ?pro_id=N — redirect home if missing or invalid
 $id = filter_var($_GET['pro_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 if (!$id) {
     redirect('index.php');

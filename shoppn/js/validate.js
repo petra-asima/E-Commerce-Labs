@@ -1,5 +1,5 @@
-// js/validate.js — client-side validation for the register and login forms.
-// This is for user experience only: the PHP action re-checks everything.
+// Client-side form validation.
+// For user experience only; every rule is re-checked on the server.
 
 const patterns = {
     email:    /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -71,7 +71,7 @@ if (registerForm) {
     });
 }
 
-// ── Login form (Task 4) ────────────────────────────────
+// ── Login form ────────────────────────────────
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
     loginForm.addEventListener('submit', function (e) {
@@ -108,7 +108,7 @@ window.addEventListener('pageshow', () => {
 });
 
 
-// ── Brand form (Task 5) — same rule as add_brand_action.php ──
+// ── Brand form — same rule as add_brand_action.php ──
 const namePattern = /^[A-Za-z0-9][A-Za-z0-9 &'().,\-]{1,99}$/;
 
 const brandForm = document.getElementById('brand-form');
@@ -126,7 +126,7 @@ if (brandForm) {
 
 
 
-// ── Category form (Task 7) — same rule as add_category_action.php ──
+// ── Category form — same rule as add_category_action.php ──
 const categoryForm = document.getElementById('category-form');
 if (categoryForm) {
     categoryForm.addEventListener('submit', function (e) {
@@ -141,7 +141,7 @@ if (categoryForm) {
 }
 
 
-// ── Product form (Task 9) — same rules as add/update_product_action.php ──
+// ── Product form — same rules as add/update_product_action.php ──
 const productForm = document.getElementById('product-form');
 if (productForm) {
     productForm.addEventListener('submit', function (e) {
@@ -181,5 +181,39 @@ if (productForm) {
 
         if (!valid) { e.preventDefault(); return; }
         setLoading(productForm, 'Saving…');
+    });
+}
+
+// ── Cart — same rules as update_qty_action.php and remove_from_cart_action.php ──
+const updateForm = document.getElementById('update-form');
+const removeForm = document.getElementById('remove-form');
+const cartError  = document.getElementById('cart-error');
+
+if (updateForm) {
+    updateForm.addEventListener('submit', function (e) {
+        // The qty inputs sit in the table and join this form through form="update-form"
+        const inputs = document.querySelectorAll('input[name="qty[]"]');
+        let firstBad = null;
+        inputs.forEach((input) => {
+            const ok = /^[1-9]\d?$/.test(input.value.trim());   // whole number 1–99
+            input.classList.toggle('invalid', !ok);
+            input.setAttribute('aria-invalid', ok ? 'false' : 'true');
+            if (!ok && !firstBad) firstBad = input;
+        });
+        if (firstBad) {
+            e.preventDefault();
+            if (cartError) cartError.textContent = 'Quantities must be whole numbers from 1 to 99.';
+            firstBad.focus();
+        }
+    });
+}
+
+if (removeForm) {
+    removeForm.addEventListener('submit', function (e) {
+        const ticked = document.querySelectorAll('input[name="remove[]"]:checked').length;
+        if (ticked === 0) {
+            e.preventDefault();
+            if (cartError) cartError.textContent = 'Tick the items you want to remove.';
+        }
     });
 }

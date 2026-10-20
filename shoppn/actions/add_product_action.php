@@ -1,10 +1,10 @@
 <?php
-// Action: handles the Add Product form submit (Task 9).
-// Reads $_POST and $_FILES, validates, saves the image, calls the controller, redirects. No SQL, no HTML.
+// Handles the Add Product form submit.
+// Reads $_POST and $_FILES, validates, saves the image, calls the controller, redirects.
 require_once __DIR__ . '/../core/core.php';
 require_once __DIR__ . '/../controllers/ProductController.php';
 
-// Brief: require_admin(). POST only.
+// Admins only, POST only
 require_admin();
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirect('views/admin/product.php');
@@ -78,7 +78,7 @@ if (!move_uploaded_file($file['tmp_name'], __DIR__ . '/../images/products/' . $f
     redirect('views/admin/product.php');
 }
 
-// ── 5. Brief: pass $filename to ProductController → addProduct() ──
+// ── 5. Save the product ─────────────────────────────────
 if ($ctrl->addProduct($cat, $brand, $title, (float) $price, $desc, $filename, $keywords)) {
     $_SESSION['success'] = 'Product added.';
 } else {

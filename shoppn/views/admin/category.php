@@ -1,9 +1,9 @@
 <?php
-// Admin: manage categories — add (Task 7) and edit (Task 8) in one page.
+// Admin: manage categories — add and edit in one page.
 require_once __DIR__ . '/../../core/core.php';
 require_once __DIR__ . '/../../controllers/ProductController.php';
 
-// Brief: require_admin() at the top — before any HTML
+// Admins only, checked before any output
 require_admin();
 
 // Show success / error messages, then clear them
@@ -13,7 +13,7 @@ unset($_SESSION['success'], $_SESSION['error']);
 
 $ctrl = new ProductController();
 
-// Task 8: if ?edit_id=N is present, load that category into the form
+// If ?edit_id=N is present, load that category into the form
 $editCategory = null;
 if (isset($_GET['edit_id'])) {
     $editId       = filter_var($_GET['edit_id'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
@@ -31,6 +31,7 @@ $page_title = 'Categories | Admin';
 require __DIR__ . '/../layout/header.php';
 ?>
 <main id="main" class="wrap admin-page">
+<?php require __DIR__ . '/../layout/admin_nav.php'; ?>
 
     <div class="admin-head">
         <h1>Categories</h1>
@@ -45,7 +46,7 @@ require __DIR__ . '/../layout/header.php';
     <?php endif; ?>
 
     <?php if ($editCategory): ?>
-        <!-- Task 8: edit mode — form targets update_category_action.php -->
+        <!-- Edit mode — form targets update_category_action.php -->
         <section class="panel">
             <h2>Edit category</h2>
             <form id="category-form" class="inline-form" method="POST"
@@ -64,7 +65,7 @@ require __DIR__ . '/../layout/header.php';
             </form>
         </section>
     <?php else: ?>
-        <!-- Task 7: add mode — form for adding a category name -->
+        <!-- Add mode -->
         <section class="panel">
             <h2>Add a category</h2>
             <form id="category-form" class="inline-form" method="POST"

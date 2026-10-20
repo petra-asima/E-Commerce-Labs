@@ -1,12 +1,11 @@
 <?php
-// Model: all SQL for brands, categories and products lives here.
-// No HTML, no echo, no $_POST, no $_SESSION.
+// Data access for brands, categories and products.
 require_once __DIR__ . '/../core/db_class.php';
 
 class ProductClass extends Database
 {
     /**
-     * Task 5 — INSERT INTO brands (brand_name) VALUES (?)
+     * INSERT INTO brands (brand_name) VALUES (?)
      * @return bool true if the brand was added
      */
     public function addBrand(string $name): bool
@@ -24,7 +23,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 5 — SELECT * FROM brands ORDER BY brand_name ASC
+     * SELECT * FROM brands ORDER BY brand_name ASC
      * @return array list of brand rows
      */
     public function getAllBrands(): array
@@ -34,7 +33,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 6 — SELECT * FROM brands WHERE brand_id = ?
+     * SELECT * FROM brands WHERE brand_id = ?
      * @return array|false one brand row, or false if not found
      */
     public function getBrandById(int $id)
@@ -48,7 +47,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 6 — UPDATE brands SET brand_name = ? WHERE brand_id = ?
+     * UPDATE brands SET brand_name = ? WHERE brand_id = ?
      * @return bool true if the update ran
      */
     public function updateBrand(int $id, string $name): bool
@@ -66,7 +65,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 7 — INSERT INTO categories (cat_name) VALUES (?)
+     * INSERT INTO categories (cat_name) VALUES (?)
      * @return bool true if the category was added
      */
     public function addCategory(string $name): bool
@@ -84,7 +83,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 7 — SELECT * FROM categories ORDER BY cat_name ASC
+     * SELECT * FROM categories ORDER BY cat_name ASC
      * @return array list of category rows
      */
     public function getAllCategories(): array
@@ -94,7 +93,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 8 — SELECT * FROM categories WHERE cat_id = ?
+     * SELECT * FROM categories WHERE cat_id = ?
      * @return array|false one category row, or false if not found
      */
     public function getCategoryById(int $id)
@@ -108,7 +107,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 8 — UPDATE categories SET cat_name = ? WHERE cat_id = ?
+     * UPDATE categories SET cat_name = ? WHERE cat_id = ?
      * @return bool true if the update ran
      */
     public function updateCategory(int $id, string $name): bool
@@ -126,7 +125,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 9 — INSERT a new product (prepared statement).
+     * INSERT a new product (prepared statement).
      * @return bool true if the product was added
      */
     public function addProduct(int $cat, int $brand, string $title, float $price,
@@ -150,7 +149,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 9 — UPDATE an existing product (prepared statement).
+     * UPDATE an existing product (prepared statement).
      * @return bool true if the update ran
      */
     public function updateProduct(int $id, int $cat, int $brand, string $title, float $price,
@@ -174,7 +173,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 9 — one product, with its category name and brand name (JOIN).
+     * One product, with its category name and brand name (JOIN).
      * @return array|false the product row, or false if not found
      */
     public function getProductById(int $id)
@@ -194,7 +193,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 9 (admin list) — every product with its category and brand names, newest first.
+     * Every product with its category and brand names, newest first.
      * @return array list of product rows (empty array if none)
      */
     public function getAllProducts(): array
@@ -209,12 +208,12 @@ class ProductClass extends Database
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    // ── Task 10: customer-facing product lists ─────────────────
+    // ── Customer-facing product lists ─────────────────
     // Every list also returns the brand and category names, for the product cards.
     // All of them return an array of rows: an empty array when nothing matches, never false.
 
     /**
-     * Task 10 — random selection for the home page (ORDER BY RAND() LIMIT ?).
+     * Random selection for the home page (ORDER BY RAND() LIMIT ?).
      */
     public function getFeaturedProducts(int $limit = 6): array
     {
@@ -234,7 +233,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 10 — products in one category (WHERE product_cat = ?).
+     * Products in one category (WHERE product_cat = ?).
      */
     public function getProductsByCategory(int $cat_id): array
     {
@@ -254,7 +253,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 10 — products from one brand (WHERE product_brand = ?).
+     * Products from one brand (WHERE product_brand = ?).
      */
     public function getProductsByBrand(int $brand_id): array
     {
@@ -274,7 +273,7 @@ class ProductClass extends Database
     }
 
     /**
-     * Task 10 — search titles and keywords (LIKE ? with '%' . $query . '%').
+     * Search titles and keywords (LIKE ? with '%' . $query . '%').
      */
     public function searchProducts(string $query): array
     {
@@ -294,5 +293,22 @@ class ProductClass extends Database
         $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
         return $rows;
+    }
+
+    /**
+     * Only categories that have at least one product, with how many.
+     * Empty categories are hidden from customers; admins still see them all on the Category page.
+     * @return array list of category rows, each with product_count and one product_image
+     */
+    public function getCategoriesWithProducts(): array
+    {
+        $result = $this->conn->query(
+            'SELECT c.cat_id, c.cat_name, COUNT(p.product_id) AS product_count, MAX(p.product_image) AS product_image
+             FROM categories c
+             JOIN products p ON p.product_cat = c.cat_id
+             GROUP BY c.cat_id, c.cat_name
+             ORDER BY c.cat_name ASC'
+        );
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 }

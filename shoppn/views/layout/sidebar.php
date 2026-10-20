@@ -1,11 +1,10 @@
 <?php
-// Categories & brands sidebar (Task 10).
-// Gets its lists through ProductController — no SQL here.
-// Categories, Brands and (admins only) Store admin are dropdowns (<details>): tap the heading to open or close.
+// Categories & brands sidebar.
+// Categories and Brands are dropdowns (<details>): tap the heading to open or close the list.
 require_once __DIR__ . '/../../controllers/ProductController.php';
 
 $sidebarCtrl       = new ProductController();
-$sidebarCategories = $sidebarCtrl->getAllCategories();
+$sidebarCategories = $sidebarCtrl->getCategoriesWithProducts();   // empty categories are hidden
 $sidebarBrands     = $sidebarCtrl->getAllBrands();
 
 // Which filter is active, so it can be highlighted and its list starts open
@@ -19,7 +18,7 @@ $showingAll  = !$activeCat && !$activeBrand;
     <a class="sidebar-all" href="<?= url() ?>" <?= $showingAll ? 'aria-current="page"' : '' ?>>All products</a>
 
     <details class="sidebar-group" <?= $activeCat ? 'open' : '' ?>>
-        <summary>Categories <span class="sidebar-count"><?= count($sidebarCategories) ?></span></summary>
+        <summary>Categories</summary>
         <?php if (empty($sidebarCategories)): ?>
             <p class="muted">No categories yet.</p>
         <?php else: ?>
@@ -35,7 +34,7 @@ $showingAll  = !$activeCat && !$activeBrand;
     </details>
 
     <details class="sidebar-group" <?= $activeBrand ? 'open' : '' ?>>
-        <summary>Brands <span class="sidebar-count"><?= count($sidebarBrands) ?></span></summary>
+        <summary>Brands</summary>
         <?php if (empty($sidebarBrands)): ?>
             <p class="muted">No brands yet.</p>
         <?php else: ?>
@@ -49,16 +48,4 @@ $showingAll  = !$activeCat && !$activeBrand;
             </ul>
         <?php endif; ?>
     </details>
-
-    <?php if (is_admin()): ?>
-        <!-- Admin only (Tasks 5, 7, 9): links to manage the store -->
-        <details class="sidebar-group sidebar-admin">
-            <summary>Store admin</summary>
-            <ul>
-                <li><a href="<?= url('views/admin/brand.php') ?>">Brands</a></li>
-                <li><a href="<?= url('views/admin/category.php') ?>">Categories</a></li>
-                <li><a href="<?= url('views/admin/product.php') ?>">Products</a></li>
-            </ul>
-        </details>
-    <?php endif; ?>
 </aside>

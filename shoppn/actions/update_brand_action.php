@@ -1,18 +1,18 @@
 <?php
-// Action: handles the Edit Brand form submit (Task 6).
-// Reads $_POST, validates, calls the controller, sets a message, redirects. No SQL, no HTML.
+// Handles the Edit Brand form submit.
+// Reads $_POST, validates, calls the controller, sets a message, redirects.
 require_once __DIR__ . '/../core/core.php';
 require_once __DIR__ . '/../controllers/ProductController.php';
 
-// Brief: require_admin()
+// Admins only
 require_admin();
 
-// Brief: POST only
+// POST only
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirect('views/admin/brand.php');
 }
 
-// Brief: validate brand_id (must be a positive integer) and brand_name
+// Validate brand_id (must be a positive integer) and brand_name
 $id   = filter_var($_POST['brand_id'] ?? '', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 $name = trim(strip_tags($_POST['brand_name'] ?? ''));
 
@@ -33,7 +33,7 @@ if (!$ctrl->getBrandById($id)) {
     redirect('views/admin/brand.php');
 }
 
-// Brief: call ProductController → updateBrand(), redirect with a success message
+// Call ProductController → updateBrand(), redirect with a success message
 if ($ctrl->updateBrand($id, $name)) {
     $_SESSION['success'] = 'Brand updated.';
 } else {

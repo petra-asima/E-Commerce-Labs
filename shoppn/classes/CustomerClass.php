@@ -58,7 +58,7 @@ class CustomerClass extends Database
     }
 
     /**
-     * find the customer, then check the password with password_verify().
+     * Find the customer, then check the password with password_verify().
      * @return array|false  the customer row on success, false on failure
      */
     public function login(string $email, string $pass)

@@ -12,7 +12,7 @@ class CustomerController
     }
 
     /**
-     * register a new customer.
+     * Register a new customer.
      * @return array ['success' => true, 'customer_id' => N] or ['success' => false, 'error' => '...']
      */
     public function register(array $data): array
@@ -37,7 +37,7 @@ class CustomerController
     }
 
     /**
-     * log a customer in via the Model's login().
+     * Log a customer in via the Model's login().
      * @return array the customer row on success, or ['error' => '...'] on failure
      */
     public function login(string $email, string $pass): array

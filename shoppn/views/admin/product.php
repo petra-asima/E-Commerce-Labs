@@ -1,9 +1,9 @@
 <?php
-// Admin: manage products — add and edit (Task 9) in one page.
+// Admin: manage products — add and edit in one page.
 require_once __DIR__ . '/../../core/core.php';
 require_once __DIR__ . '/../../controllers/ProductController.php';
 
-// Brief: require_admin() at top — before any HTML
+// Admins only, checked before any output
 require_admin();
 
 // Show success / error messages, then clear them
@@ -14,11 +14,11 @@ unset($_SESSION['success'], $_SESSION['error'], $_SESSION['old']);
 
 $ctrl = new ProductController();
 
-// Brief: dropdowns come from getAllCategories() and getAllBrands()
+// Dropdowns come from getAllCategories() and getAllBrands()
 $categories = $ctrl->getAllCategories();
 $brands     = $ctrl->getAllBrands();
 
-// Brief: edit mode (?edit_id=N) pre-fills every field from getProductById()
+// Edit mode (?edit_id=N) pre-fills every field from getProductById()
 $editProduct = null;
 if (isset($_GET['edit_id'])) {
     $editId      = filter_var($_GET['edit_id'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
@@ -45,6 +45,7 @@ $page_title = 'Products | Admin';
 require __DIR__ . '/../layout/header.php';
 ?>
 <main id="main" class="wrap admin-page">
+<?php require __DIR__ . '/../layout/admin_nav.php'; ?>
 
     <div class="admin-head">
         <h1>Products</h1>
@@ -70,7 +71,7 @@ require __DIR__ . '/../layout/header.php';
         <section class="panel">
             <h2><?= $editProduct ? 'Edit product' : 'Add a product' ?></h2>
 
-            <!-- Brief: enctype='multipart/form-data' so the image can be uploaded -->
+            <!-- Multipart encoding is required for the image upload -->
             <form id="product-form" class="product-form" method="POST" enctype="multipart/form-data" novalidate
                   action="<?= url($editProduct ? 'actions/update_product_action.php' : 'actions/add_product_action.php') ?>"
                   data-image-required="<?= $editProduct ? 'no' : 'yes' ?>">
@@ -140,7 +141,7 @@ require __DIR__ . '/../layout/header.php';
                 <div class="field">
                     <label for="product_image">Product image</label>
                     <?php if ($editProduct && !empty($editProduct['product_image'])): ?>
-                        <!-- Brief: show current image preview in edit mode -->
+                        <!-- Show current image preview in edit mode -->
                         <div class="image-preview">
                             <img src="<?= url('images/products/' . rawurlencode($editProduct['product_image'])) ?>"
                                  alt="Current image of <?= e($editProduct['product_title']) ?>">

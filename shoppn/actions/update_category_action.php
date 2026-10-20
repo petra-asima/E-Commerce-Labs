@@ -1,18 +1,18 @@
 <?php
-// Action: handles the Edit Category form submit (Task 8).
-// Reads $_POST, validates, calls the controller, sets a message, redirects. No SQL, no HTML.
+// Handles the Edit Category form submit.
+// Reads $_POST, validates, calls the controller, sets a message, redirects.
 require_once __DIR__ . '/../core/core.php';
 require_once __DIR__ . '/../controllers/ProductController.php';
 
-// Brief: require_admin()
+// Admins only
 require_admin();
 
-// Brief: POST only
+// POST only
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirect('views/admin/category.php');
 }
 
-// Brief: validate id (must be a positive integer) and name
+// Validate id (must be a positive integer) and name
 $id   = filter_var($_POST['cat_id'] ?? '', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 $name = trim(strip_tags($_POST['cat_name'] ?? ''));
 
@@ -33,7 +33,7 @@ if (!$ctrl->getCategoryById($id)) {
     redirect('views/admin/category.php');
 }
 
-// Brief: update and redirect
+// Update and redirect
 if ($ctrl->updateCategory($id, $name)) {
     $_SESSION['success'] = 'Category updated.';
 } else {
